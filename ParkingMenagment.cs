@@ -36,4 +36,5 @@ public class ParkingManagement
     {
         return parkedCars.ContainsKey(licensePlate);
     }
+    
 }
