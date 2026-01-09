@@ -13,11 +13,13 @@ class Program
 
         Vetura makina2 = new Makina("Honda", "Civic", "01-656-HJ");
         Console.WriteLine($"Marka: {makina2.Marka}, Modeli: {makina2.Modeli}, Targa: {makina2.Targa}");
+        //------------------------------------------------------------------
+
         
-        
-        Parkingu parkingu = new Parkingu(1);
-        parkingu.makinat.Add((Makina)makina1);  
-        Console.WriteLine($"Kapaciteti i parkingut: {parkingu.Kapaciteti}");
+        Parkingu parkingu = new Parkingu(20);
+            parkingu.shtoAutomjetin(makina1 as Makina);
+            Console.WriteLine($"Numri i makinave në parking: {parkingu.makinat.Count}");
+            //qetu kena met me shti makinat n list
         
         
         
@@ -108,6 +110,12 @@ public class Parkingu
 
  public void shtoAutomjetin(TipiAutomjetit Emri)
         {
+            if(MakinaList.Count >= Kapaciteti)
+            {
+                Console.WriteLine("Parkingu është plot. ");
+                return;
+                
+            }
             if (Emri == TipiAutomjetit.Makina)
             {
                 MakinaList.Add(Emri);
