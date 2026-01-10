@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+
 
 namespace ParkingSystem{
 
@@ -12,8 +14,12 @@ class Program
     Parkingu parkingu = new Parkingu(5);
 
     Makina makina1 = new Makina("BMW", "X5", "KS-123-AB" , TipiAutomjetit.Vetura);
-parkingu.shtoAutomjetin(makina1);
-
+    makina1.ShfaqTeDhenat();
+    makina1.FillimiIParkimit(DateTime.Now);
+    makina1.MbarimiIParkimit(DateTime.Now.AddHours(3.35));
+    parkingu.Tarifa(makina1, 3.35);
+    parkingu.shtoAutomjetin(makina1);
+    parkingu.ArkivoTeDhenat(makina1);
         
         
         
@@ -82,14 +88,21 @@ public abstract class Automjeti
         Lloji = lloji;
         Targa = targa;
     }
+
+    public void ShfaqTeDhenat()
+    {
+        Console.WriteLine($"Marka: {Marka}, Tipi: {Tipi}, Targa: {Targa}, Lloji: {Lloji}");
+    }
 }
 
 public class Makina : Automjeti, IkohaParkimit
 {
     public Makina(string marka, string tipi, string targa, TipiAutomjetit lloji)
         : base(marka, tipi, targa, lloji)
-    {
-    }
+        {
+            
+        }
+    
     public void FillimiIParkimit(DateTime kohaFillimit)
     {
         Console.WriteLine($"Koha e fillimit të parkimit: {kohaFillimit}");
@@ -115,7 +128,26 @@ public class Parkingu
     motocikleta = new List<Automjeti>();
     kamionet = new List<Automjeti>();
  }
-
+//------------------Tarifa------------------------------------
+ public void Tarifa(Automjeti automjeti, double oreParkim)
+ {
+    double tarifa = 0;
+    switch (automjeti.Lloji)
+    {
+        case TipiAutomjetit.Vetura:
+        
+            tarifa = 2 * oreParkim;
+            break;
+        case TipiAutomjetit.Motocikleta:
+            tarifa = 1 * oreParkim;
+            break;
+        case TipiAutomjetit.Kamion:
+            tarifa = 5.0 * oreParkim;
+            break;
+    }
+    Console.WriteLine($"Tarifa për {automjeti.Lloji} me targa {automjeti.Targa} për {oreParkim} orë është: {tarifa} EUR");
+ }
+//------------------shtoAutomjetin------------------------------------
  public void shtoAutomjetin(Automjeti automjeti)
         {
             int Totali = veturat.Count + motocikleta.Count + kamionet.Count;
@@ -144,7 +176,19 @@ public class Parkingu
             }
             // Console.WriteLine($"{automjeti.Lloji} u shtua në parking.");
         }
-    
+    public void ArkivoTeDhenat (Automjeti automjeti)
+        {
+            string path = "teDhenatParkimit.txt";
+
+            string teDhenat =
+             $"{automjeti.Marka}," +
+        $"{automjeti.Tipi}," +
+        $"{automjeti.Targa}," +
+        $"{automjeti.Lloji}," +
+        $"{DateTime.Now}";
+        
+        File.AppendAllText(path, teDhenat+ Environment.NewLine);
+        }
 }
 
 }
