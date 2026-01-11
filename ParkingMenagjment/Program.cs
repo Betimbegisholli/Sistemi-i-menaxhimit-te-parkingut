@@ -13,7 +13,7 @@ class Program
         
     Parkingu parkingu = new Parkingu(5);
 
-    Makina makina1 = new Makina("BMW", "X5", "KS-123-AB" , TipiAutomjetit.Vetura);
+    Makina makina1 = new Makina("BMW", "X5", "KS-124-AB" , TipiAutomjetit.Vetura);
     makina1.ShfaqTeDhenat();
     makina1.FillimiIParkimit(DateTime.Now);
     makina1.MbarimiIParkimit(DateTime.Now.AddHours(3.35));
