@@ -2,158 +2,137 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 
 
-namespace ParkingSystem{
-
-class Program
+namespace ParkingSystem
 {
-    static void Main(string[] args)
+
+    class Program
     {
-        
-    Parkingu  parkingu = new Parkingu(10);
+        static void Main(string[] args)
+        {
 
-    Makina makina = new Makina("Toyota", "Corolla", "AA123BB");
-    Motocikleta moto = new Motocikleta("Yamaha", "YZF-R3", "CC456DD");
-    Kamion kamion = new Kamion("Volvo", "FH16", "EE789FF");
+            Parkingu parkingu = new Parkingu();
 
+            Makina makina = new Makina("Toyota", "Corolla", "AA123BB");
+            
+            VendiParkimit vendi1 = new VendiParkimit(1, TipiVendit.standard, 2.0);
+          
+            parkingu.ShtoVendeParkimi(vendi1);
 
-    
-    VendiParkimit vendi1 = new VendiParkimit(1, TipiVendit.standard, 2.0);
-    VendiParkimit vendi2 = new VendiParkimit(2, TipiVendit.electric, 3.0);
-    VendiParkimit vendi3 = new VendiParkimit(3, TipiVendit.personaMeAftesiTeKufizuara, 1.5);
+            parkingu.Parko(makina);
+            System.Threading.Thread.Sleep(100000);
+            parkingu.Dalja(makina);
 
-    parkingu.ShtoVendeParkimi(vendi1);
-    parkingu.ShtoVendeParkimi(vendi2);
-    parkingu.ShtoVendeParkimi(vendi3);
-  
-    
-    
-    
-    
-        
-        
-        
-        
-       
-       
-       
-       
-       
-       
-       
-       
-       
-        // IkohaParkimit kohaParkimit = makina as IkohaParkimit;
-        // if (kohaParkimit != null)
-        // {
-        //     kohaParkimit.FillimiIParkimit(DateTime.Now);
-        //     // Simulimi i parkimit për 2 orë
-        //     System.Threading.Thread.Sleep(9075); // Përdoret për të simuluar vonesën
-        //     kohaParkimit.MbarimiIParkimit(DateTime.Now.AddHours(2));
-        // }
+        }
+
     }
 
-}
+    //------------------------------------------------------------------------------------------------------------------------------
+    //interfaces
 
-//-----------------------------------------------------------------------------------------------------
-//interfaces----------------------------------------------------------------------------------------
-interface IkohaParkimit
-{
+    interface IkohaParkimit
+    {
         void FillimiIParkimit(DateTime kohaFillimit);
         void MbarimiIParkimit(DateTime kohaMbarimit);
-}
-
-//emuns
-
-public enum TipiAutomjetit
-{
-    Vetura,
-    Motocikleta,
-    Kamion
-}
-
-public enum  TipiVendit
-{
-    electric,
-    
-    standard,
-
-    personaMeAftesiTeKufizuara
-}
-
-//Objects
-
-public abstract class Automjeti: IkohaParkimit
-{
-    public string Marka { get; set; }
-    public string Tipi { get; set; }
-    public string Targa { get; set; }
-    public TipiAutomjetit Lloji { get; set; }
-
-    public DateTime KohaHyrjes { get; set; }
-    public DateTime KohaDaljes { get; set; }
-
-   void IkohaParkimit.FillimiIParkimit(DateTime kohaFillimit)
-    {   KohaHyrjes = kohaFillimit;
-        Console.WriteLine($"Makina {Marka} me targa {Targa} hyri ne parking ne: {KohaHyrjes}");
     }
 
-    void IkohaParkimit.MbarimiIParkimit(DateTime kohaMbarimit)
-    {   KohaDaljes = kohaMbarimit;
-        Console.WriteLine($"Makina {Marka} me targa {Targa} doli nga parkingu ne: {KohaDaljes}");
-    }
+    //emuns
 
-    public Automjeti(string marka, string tipi, string targa , TipiAutomjetit lloji)
+    public enum TipiAutomjetit
     {
-        Marka = marka;
-        Tipi = tipi;
-        Lloji = lloji;
-        Targa = targa;
-
+        Vetura,
+        Motocikleta,
+        Kamion
     }
 
-    public void ShfaqTeDhenat()
+    public enum TipiVendit
     {
-        Console.WriteLine($"Marka: {Marka}, Tipi: {Tipi}, Targa: {Targa}, Lloji: {Lloji}");
+        electric,
+
+        standard,
+
+        personaMeAftesiTeKufizuara
     }
-}
 
-public class Makina : Automjeti
-{
-    public Makina(string marka, string tipi, string targa)
-        : base(marka, tipi, targa, TipiAutomjetit.Vetura)
+    //Klasa Automjetit (Klasa Prind)!
+
+    public abstract class Automjeti : IkohaParkimit
+    {
+        public string Marka { get; set; }
+        public string Tipi { get; set; }
+        public string Targa { get; set; }
+        public TipiAutomjetit Lloji { get; set; }
+
+        public DateTime KohaHyrjes { get; set; }
+        public DateTime KohaDaljes { get; set; }
+
+        void IkohaParkimit.FillimiIParkimit(DateTime kohaFillimit)
         {
-            
+            KohaHyrjes = kohaFillimit;
+            Console.WriteLine($"Makina {Marka} me targa {Targa} hyri ne parking ne: {KohaHyrjes}");
         }
 
-        
-    
-   
-}
-
-public class Motocikleta : Automjeti
-{
-    public Motocikleta(string marka, string tipi, string targa)
-        : base(marka, tipi, targa, TipiAutomjetit.Motocikleta)
+        void IkohaParkimit.MbarimiIParkimit(DateTime kohaMbarimit)
         {
-            
+            KohaDaljes = kohaMbarimit;
+            Console.WriteLine($"Makina {Marka} me targa {Targa} doli nga parkingu ne: {KohaDaljes}");
         }
-    
-   
-}
-public class Kamion : Automjeti
-{
-    public Kamion(string marka, string tipi, string targa)
-        : base(marka, tipi, targa, TipiAutomjetit.Kamion)
-        {
-            
-        }
-    
-   
-}
 
-public class VendiParkimit
+        public Automjeti(string marka, string tipi, string targa, TipiAutomjetit lloji)
+        {
+            Marka = marka;
+            Tipi = tipi;
+            Lloji = lloji;
+            Targa = targa;
+
+        }
+
+        public void ShfaqTeDhenat()
+        {
+            Console.WriteLine($"Marka: {Marka}, Tipi: {Tipi}, Targa: {Targa}, Lloji: {Lloji}");
+        }
+    }
+
+    // Klasat femije!!!
+
+    public class Makina : Automjeti
+    {
+        public Makina(string marka, string tipi, string targa)
+            : base(marka, tipi, targa, TipiAutomjetit.Vetura)
+        {
+
+        }
+
+
+    }
+
+    public class Motocikleta : Automjeti
+    {
+        public Motocikleta(string marka, string tipi, string targa)
+            : base(marka, tipi, targa, TipiAutomjetit.Motocikleta)
+        {
+
+        }
+
+
+    }
+    public class Kamion : Automjeti
+    {
+        public Kamion(string marka, string tipi, string targa)
+            : base(marka, tipi, targa, TipiAutomjetit.Kamion)
+        {
+
+        }
+
+
+    }
+
+
+    // Klasa Vendit te Parkimit (logjika)!!
+    public class VendiParkimit
     {
         public int ID { get; set; }
         public TipiVendit Tipi { get; set; }
@@ -182,6 +161,8 @@ public class VendiParkimit
             {
                 automjetiParkuar = automjeti;
                 eshteIzene = true;
+
+                ((IkohaParkimit)automjeti).FillimiIParkimit(DateTime.Now);
                 Console.WriteLine($"Automjeti me targa {automjeti.Targa} është parkuar në vendin {ID}.");
             }
         }
@@ -194,6 +175,7 @@ public class VendiParkimit
             }
             else
             {
+                ((IkohaParkimit)automjetiParkuar).MbarimiIParkimit(DateTime.Now);
                 Console.WriteLine($"Automjeti me targa {automjetiParkuar.Targa} është larguar nga vendi {ID}.");
                 automjetiParkuar = null;
                 eshteIzene = false;
@@ -202,245 +184,76 @@ public class VendiParkimit
 
     }
 
-// kapaciteti
-public class Parkingu
-{
- public List<VendiParkimit> vendiParkimit {get; set;}
- public void ShtoVendeParkimi(VendiParkimit vendi)
-{
-    vendiParkimit.Add(vendi);
-    Console.WriteLine($"Vendi i parkimit me ID {vendi.ID} është shtuar.");
-}
-
- 
-
-
-
-
-
-
-//------------------Tarifa------------------------------------
- public void Tarifa(Automjeti automjeti, double oreParkim)
- {
-    double tarifa = 0;
-    switch (automjeti.Lloji)
+    // Klasa e parkingut ne pergjithesi
+    public class Parkingu
     {
-        case TipiAutomjetit.Vetura:
-        
-            tarifa = 2 * oreParkim;
-            break;
-        case TipiAutomjetit.Motocikleta:
-            tarifa = 1 * oreParkim;
-            break;
-        case TipiAutomjetit.Kamion:
-            tarifa = 5.0 * oreParkim;
-            break;
-    }
-    Console.WriteLine($"Tarifa për {automjeti.Lloji} me targa {automjeti.Targa} për {oreParkim} orë është: {tarifa} EUR");
- }
+        public List<VendiParkimit> VendParkimi { get; set; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//------------------shtoAutomjetin------------------------------------
- public void shtoAutomjetin(Automjeti automjeti)
+        public Parkingu ()
         {
-            int Totali = veturat.Count + motocikleta.Count + kamionet.Count;
-                
-                if (Totali >= Kapaciteti)
-            {
-                Console.WriteLine("Parkingu është plot.");
-                return;
-            }
-
-            switch (automjeti.Lloji)
-            {
-                    case TipiAutomjetit.Vetura:
-                        veturat.Add(automjeti);
-                        Console.WriteLine("Vetura u shtua në parking.");
-                        break;
-                    case TipiAutomjetit.Motocikleta:
-                        motocikleta.Add(automjeti);
-                        Console.WriteLine("Motocikleta u shtua në parking.");
-                        break;
-                    case TipiAutomjetit.Kamion:
-                        kamionet.Add(automjeti);
-                        Console.WriteLine("Kamioni u shtua në parking.");
-
-                        break;
-                
-            }
-            // Console.WriteLine($"{automjeti.Lloji} u shtua në parking.");
+            VendParkimi = new List<VendiParkimit>();
         }
-    public void ArkivoTeDhenat (Automjeti automjeti)
+        public void ShtoVendeParkimi(VendiParkimit vendi)
+        {
+            VendParkimi.Add(vendi);
+            Console.WriteLine($"Vendi i parkimit me ID {vendi.ID} është shtuar.");
+        }
+
+        public void Parko (Automjeti automjeti)
+        {
+            foreach (VendiParkimit vend in VendParkimi)
+            {
+                if (!vend.eshteIzene)
+                {
+                    vend.parkoAutomjetin(automjeti);
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Nuk ka vende te lira!");
+                }
+            }
+        }
+
+        public void Dalja (Automjeti automjeti)
+        {
+            foreach (VendiParkimit vend in VendParkimi)
+            {
+                if (vend.automjetiParkuar == automjeti)
+                {
+                    vend.liroVendin();
+                    double ore = (automjeti.KohaDaljes - automjeti.KohaHyrjes).TotalHours;
+                    double tarifa = LlogaritTarifen(automjeti, ore, vend.tarifa);
+                    ArkivoTeDhenat(automjeti, vend, tarifa);
+                    Console.WriteLine($"Tarifa totale: {tarifa} EUR");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Ky automjet nuk u gjet ne parking!");
+                }
+            }
+        }
+
+        private double LlogaritTarifen(Automjeti automjeti, double ore, double tarifa)
+        {
+            double koeficienti = 
+            automjeti.Lloji == TipiAutomjetit.Motocikleta ? 0.5 :
+            automjeti.Lloji == TipiAutomjetit.Kamion ? 2.0 :
+            1.0;
+            return ore * tarifa * koeficienti;
+        }
+
+        private void ArkivoTeDhenat (Automjeti automjeti, VendiParkimit vendi, double tarifa)
         {
             string path = "teDhenatParkimit.txt";
-
-            string teDhenat =
-             $"{automjeti.Marka}," +
-             $"{automjeti.Tipi}," +
-             $"{automjeti.Targa}," +
-             $"{automjeti.Lloji}," +
-             $"{DateTime.Now}";
+            string teDhenat = $"{DateTime.Now}, {automjeti.Targa}, {automjeti.Lloji}, VendID:{vendi.ID}, Tarifa:{tarifa:F2} EUR";
+            File.AppendAllText(path, teDhenat + Environment.NewLine);
         
-            File.AppendAllText(path, teDhenat+ Environment.NewLine);
         }
-}
 
-    
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// //interfaces
-// interface IkohaParkimit
-// {
-//      void FillimiIParkimit(DateTime kohaFillimit);
-//     void MbarimiIParkimit(DateTime kohaMbarimit);
-// }
-
-// //emuns
-
-// // public enum TipiAutomjetit
-// // {
-// //     Makina,
-// //     Motocikletë,
-// //     Kamion
-// // }
-
-// public enum vendiParkimit
-// {
-//     electric,
-    
-//     standard,
-
-//     personaMeAftesiTeKufizuara
-// }
-
-// //Objects
-
-// public abstract class Vetura
-// {
-//     public string Marka { get; set; }
-//     public string Modeli { get; set; }
-//     public string Targa { get; set; }
-
-
-
-//     public Vetura(string marka, string modeli, string targa)
-//     {
-//         Marka = marka;
-//         Modeli = modeli;
         
-//         Targa = targa;
-//     }
-// }
 
-// public class Makina : Vetura, IkohaParkimit
-// {
-//     public Makina(string marka, string modeli, string targa)
-//         : base(marka, modeli, targa)
-//     {
-//     }
-//     public void FillimiIParkimit(DateTime kohaFillimit)
-//     {
-//         Console.WriteLine($"Koha e fillimit të parkimit: {kohaFillimit}");
-//     }
+    }
 
-//     public void MbarimiIParkimit(DateTime kohaMbarimit)
-//     {
-//         Console.WriteLine($"Koha e mbarimit të parkimit: {kohaMbarimit}");
-//     }
-// }
-
-// // kapaciteti
-// public class Parkingu
-// {
-//  public List<Makina> makinat {get; set;}
-//  public int Kapaciteti {get; set;}
-
-//  public Parkingu(int kapaciteti){
-//     Kapaciteti = kapaciteti;
-//     makinat = new List<Makina>();
-//  }
- 
-    
-
-// }
+}
