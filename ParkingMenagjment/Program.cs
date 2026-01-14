@@ -14,7 +14,9 @@ namespace ParkingSystem
         static void Main(string[] args)
         {
 
-            Parkingu parkingu = new Parkingu();
+            Parkingu parkingu = new Parkingu(0);
+
+            
 
             Makina makina = new Makina("Toyota", "Corolla", "AA123BB");
             
@@ -23,8 +25,17 @@ namespace ParkingSystem
             parkingu.ShtoVendeParkimi(vendi1);
 
             parkingu.Parko(makina);
-            System.Threading.Thread.Sleep(100000);
+            System.Threading.Thread.Sleep(100);
             parkingu.Dalja(makina);
+
+            Console.WriteLine("---------------------------------------------------");
+            Kamion kamion = new Kamion("Volvo", "FH16", "CC456DD");
+            VendiParkimit vendi2 = new VendiParkimit(2, TipiVendit.standard, 3.0);
+            parkingu.ShtoVendeParkimi(vendi2);
+
+            parkingu.Parko(kamion);
+            System.Threading.Thread.Sleep(100);
+            parkingu.Dalja(kamion);
 
         }
 
@@ -32,8 +43,7 @@ namespace ParkingSystem
 
     //------------------------------------------------------------------------------------------------------------------------------
     //interfaces
-
-    interface IkohaParkimit
+ interface IkohaParkimit
     {
         void FillimiIParkimit(DateTime kohaFillimit);
         void MbarimiIParkimit(DateTime kohaMbarimit);
@@ -72,13 +82,13 @@ namespace ParkingSystem
         void IkohaParkimit.FillimiIParkimit(DateTime kohaFillimit)
         {
             KohaHyrjes = kohaFillimit;
-            Console.WriteLine($"Makina {Marka} me targa {Targa} hyri ne parking ne: {KohaHyrjes}");
+            Console.WriteLine($"Lloji: {Lloji}, {Marka} me targa {Targa} hyriii ne parking ne: {KohaHyrjes}");
         }
 
         void IkohaParkimit.MbarimiIParkimit(DateTime kohaMbarimit)
         {
             KohaDaljes = kohaMbarimit;
-            Console.WriteLine($"Makina {Marka} me targa {Targa} doli nga parkingu ne: {KohaDaljes}");
+            Console.WriteLine($"Lloji: {Lloji}, {Marka} me targa {Targa} doli nga parkingu ne: {KohaDaljes}");
         }
 
         public Automjeti(string marka, string tipi, string targa, TipiAutomjetit lloji)
@@ -92,7 +102,7 @@ namespace ParkingSystem
 
         public void ShfaqTeDhenat()
         {
-            Console.WriteLine($"Marka: {Marka}, Tipi: {Tipi}, Targa: {Targa}, Lloji: {Lloji}");
+            Console.WriteLine($"Marka: {Marka}, Tipi: {Tipi}, Targa: {Targa}, ");
         }
     }
 
@@ -137,7 +147,7 @@ namespace ParkingSystem
         public int ID { get; set; }
         public TipiVendit Tipi { get; set; }
 
-        public bool eshteIzene { get; set; }
+        public bool eshteIzene { get; private set; }
 
         public double tarifa = 0;
 
@@ -185,22 +195,32 @@ namespace ParkingSystem
     }
 
     // Klasa e parkingut ne pergjithesi
-    public class Parkingu
+    public class Parkingu  //parkingu standart
     {
         public List<VendiParkimit> VendParkimi { get; set; }
-
-        public Parkingu ()
+        
+        public int Kapaciteti { get; set; }
+        public Parkingu (int kapaciteti)
         {
             VendParkimi = new List<VendiParkimit>();
+            
+            this.Kapaciteti = kapaciteti;
         }
         public void ShtoVendeParkimi(VendiParkimit vendi)
         {
+            if (VendParkimi.Count >= Kapaciteti)
+            {
+                Console.WriteLine("Nuk mund të shtoni më vende parkimi, kapaciteti është arritur.");
+                return;
+            }
             VendParkimi.Add(vendi);
             Console.WriteLine($"Vendi i parkimit me ID {vendi.ID} është shtuar.");
         }
 
         public void Parko (Automjeti automjeti)
         {
+
+            
             foreach (VendiParkimit vend in VendParkimi)
             {
                 if (!vend.eshteIzene)
@@ -208,11 +228,10 @@ namespace ParkingSystem
                     vend.parkoAutomjetin(automjeti);
                     return;
                 }
-                else
-                {
-                    Console.WriteLine("Nuk ka vende te lira!");
-                }
+                
+                
             }
+                Console.WriteLine("Nuk ka vende te lira!");
         }
 
         public void Dalja (Automjeti automjeti)
@@ -228,11 +247,10 @@ namespace ParkingSystem
                     Console.WriteLine($"Tarifa totale: {tarifa} EUR");
                     return;
                 }
-                else
-                {
-                    Console.WriteLine("Ky automjet nuk u gjet ne parking!");
-                }
+                
+                
             }
+                    Console.WriteLine("Ky automjet nuk u gjet ne parking!");
         }
 
         private double LlogaritTarifen(Automjeti automjeti, double ore, double tarifa)
@@ -255,5 +273,11 @@ namespace ParkingSystem
         
 
     }
+
+
+    
+
+    
+
 
 }
