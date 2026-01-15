@@ -1,5 +1,6 @@
-namespace ParkingSystem {
-        public enum TipiAutomjetit
+namespace ParkingMenagjment
+{
+    public enum TipiAutomjetit
     {
         Vetura,
         Motocikleta,
@@ -9,9 +10,7 @@ namespace ParkingSystem {
     public enum TipiVendit
     {
         electric,
-
         standard,
-
         personaMeAftesiTeKufizuara
     }
 }

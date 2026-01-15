@@ -1,0 +1,15 @@
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\bin\Debug\net10.0\ParkingMenagjment.exe
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\bin\Debug\net10.0\ParkingMenagjment.deps.json
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\bin\Debug\net10.0\ParkingMenagjment.runtimeconfig.json
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\bin\Debug\net10.0\ParkingMenagjment.dll
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\bin\Debug\net10.0\ParkingMenagjment.pdb
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.AssemblyInfoInputs.cache
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.AssemblyInfo.cs
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.sourcelink.json
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.dll
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\refint\ParkingMenagjment.dll
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.pdb
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ParkingMenagjment.genruntimeconfig.cache
+C:\Users\HP\Desktop\ConsoleAPP\Sistemi-i-menaxhimit-te-parkingut\ParkingMenagjment\obj\Debug\net10.0\ref\ParkingMenagjment.dll

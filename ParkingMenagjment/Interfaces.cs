@@ -1,9 +1,10 @@
 using System;
-namespace ParkingSystem
+
+namespace ParkingMenagjment
 {
-   interface IkohaParkimit
+    public interface IkohaParkimit
     {
         void FillimiIParkimit(DateTime kohaFillimit);
         void MbarimiIParkimit(DateTime kohaMbarimit);
     }
-    }
+}
