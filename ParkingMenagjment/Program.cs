@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace ParkingSystem
@@ -12,38 +13,107 @@ namespace ParkingSystem
     class Program
     {
         static void Main(string[] args)
+{
+    int kapaciteti = 28;
+    Parkingu parkingu = new Parkingu(kapaciteti);
+
+    // Shtojmë vendet e parkimit
+    int id = 1;
+    for (int i = 0; i < 20; i++)
+        parkingu.ShtoVendeParkimi(new VendiParkimit(id++, TipiVendit.standard, 2.0));
+
+    for (int i = 0; i < 5; i++)
+        parkingu.ShtoVendeParkimi(new VendiParkimit(id++, TipiVendit.electric, 3.0));
+
+    for (int i = 0; i < 3; i++)
+        parkingu.ShtoVendeParkimi(new VendiParkimit(id++, TipiVendit.personaMeAftesiTeKufizuara, 4.0));
+
+    List<Automjeti> automjetet = new List<Automjeti>();
+
+    Console.WriteLine("Regjistrimi i automjeteve për parking (derisa ka vende të lira)...");
+
+    while (automjetet.Count < kapaciteti)
+    {
+        int nr = automjetet.Count + 1;
+        Console.WriteLine($"\nAutomjeti #{nr}:");
+        Console.Write("Zgjidh tipin (Makina / Motociklete / Kamion): ");
+        string tipiInput = Console.ReadLine()?.ToLower();
+
+        Automjeti automjeti;
+
+        if (tipiInput == "makina")
         {
+            Console.Write("Shkruani marken: ");
+            string marka = Console.ReadLine() ?? "";
 
-            Parkingu parkingu = new Parkingu(0);
+            Console.Write("Shkruani modelin: ");
+            string modeli = Console.ReadLine() ?? "";
 
-            
+            Console.Write("Shkruani targen: ");
+            string targa = Console.ReadLine() ?? "";
 
-            Makina makina = new Makina("Toyota", "Corolla", "AA123BB");
-            
-            VendiParkimit vendi1 = new VendiParkimit(1, TipiVendit.standard, 2.0);
-          
-            parkingu.ShtoVendeParkimi(vendi1);
+            Console.Write("A është elektrike? (po/jo): ");
+            bool electric = (Console.ReadLine()?.ToLower() == "po");
 
-            parkingu.Parko(makina);
-            System.Threading.Thread.Sleep(100);
-            parkingu.Dalja(makina);
+            Console.Write("A është për persona me aftësi të kufizuara? (po/jo): ");
+            bool meAftesi = (Console.ReadLine()?.ToLower() == "po");
 
-            Console.WriteLine("---------------------------------------------------");
-            Kamion kamion = new Kamion("Volvo", "FH16", "CC456DD");
-            VendiParkimit vendi2 = new VendiParkimit(2, TipiVendit.standard, 3.0);
-            parkingu.ShtoVendeParkimi(vendi2);
-
-            parkingu.Parko(kamion);
-            System.Threading.Thread.Sleep(100);
-            parkingu.Dalja(kamion);
-
+            automjeti = new Makina(marka, modeli, targa, electric, meAftesi);
         }
+        else if (tipiInput == "motociklete" || tipiInput == "motociklete")
+        {
+            Console.Write("Shkruani marken: ");
+            string marka = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruani modelin: ");
+            string modeli = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruani targen: ");
+            string targa = Console.ReadLine() ?? "";
+
+            automjeti = new Motocikleta(marka, modeli, targa);
+        }
+        else if (tipiInput == "kamion")
+        {
+            Console.Write("Shkruani marken: ");
+            string marka = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruani modelin: ");
+            string modeli = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruani targen: ");
+            string targa = Console.ReadLine() ?? "";
+
+            automjeti = new Kamion(marka, modeli, targa);
+        }
+        else
+        {
+            Console.WriteLine("Tip i pavlefshëm. Provoni përsëri.");
+            continue;
+        }
+
+        // Parkojmë automjetin
+        parkingu.Parko(automjeti);
+        automjetet.Add(automjeti);
+    }
+
+    Console.WriteLine("\nParking plot! Nuk mund të shtohen më automjete.");
+
+    // Opsionale: shfaqim të gjitha automjetet
+    Console.WriteLine("\nTë gjitha automjetet e parkuara:");
+    foreach (var a in automjetet)
+    {
+        a.ShfaqTeDhenat();
+    }
+}
+
+
 
     }
 
     //------------------------------------------------------------------------------------------------------------------------------
     //interfaces
- interface IkohaParkimit
+    interface IkohaParkimit
     {
         void FillimiIParkimit(DateTime kohaFillimit);
         void MbarimiIParkimit(DateTime kohaMbarimit);
@@ -110,10 +180,14 @@ namespace ParkingSystem
 
     public class Makina : Automjeti
     {
-        public Makina(string marka, string tipi, string targa)
+        public bool electric { get; set; }
+        public bool personaMeAftesiTeKufizuara { get; set; }
+        public Makina(string marka, string tipi, string targa,
+        bool electric = false, bool meAftesiTeKufizuara = false)
             : base(marka, tipi, targa, TipiAutomjetit.Vetura)
         {
-
+            this.electric = electric;
+            personaMeAftesiTeKufizuara = meAftesiTeKufizuara;
         }
 
 
@@ -166,15 +240,35 @@ namespace ParkingSystem
             if (eshteIzene)
             {
                 Console.WriteLine("Vendi i parkimit është i zënë.");
+                return;
             }
-            else
-            {
-                automjetiParkuar = automjeti;
-                eshteIzene = true;
 
-                ((IkohaParkimit)automjeti).FillimiIParkimit(DateTime.Now);
-                Console.WriteLine($"Automjeti me targa {automjeti.Targa} është parkuar në vendin {ID}.");
+            // Kontrollimi i titpit
+            if (Tipi == TipiVendit.electric)
+            {
+                if (!(automjeti is Makina m && m.electric))
+                {
+                    Console.WriteLine("Vetem makina elektrike");
+                    return;
+                }
             }
+
+            if (Tipi == TipiVendit.personaMeAftesiTeKufizuara)
+            {
+                if (!(automjeti is Makina m && m.personaMeAftesiTeKufizuara))
+                {
+                    Console.WriteLine("Vetem per persona me aftesi te kufizuara!");
+                    return;
+                }
+            }
+
+            // lejohen te gjitha veturat standard
+            automjetiParkuar = automjeti;
+            eshteIzene = true;
+
+            ((IkohaParkimit)automjeti).FillimiIParkimit(DateTime.Now);
+            Console.WriteLine($"Automjeti me targa {automjeti.Targa} është parkuar në vendin {ID}.");
+
         }
 
         public void liroVendin()
@@ -198,12 +292,12 @@ namespace ParkingSystem
     public class Parkingu  //parkingu standart
     {
         public List<VendiParkimit> VendParkimi { get; set; }
-        
+
         public int Kapaciteti { get; set; }
-        public Parkingu (int kapaciteti)
+        public Parkingu(int kapaciteti)
         {
             VendParkimi = new List<VendiParkimit>();
-            
+
             this.Kapaciteti = kapaciteti;
         }
         public void ShtoVendeParkimi(VendiParkimit vendi)
@@ -217,10 +311,10 @@ namespace ParkingSystem
             Console.WriteLine($"Vendi i parkimit me ID {vendi.ID} është shtuar.");
         }
 
-        public void Parko (Automjeti automjeti)
+        public void Parko(Automjeti automjeti)
         {
 
-            
+
             foreach (VendiParkimit vend in VendParkimi)
             {
                 if (!vend.eshteIzene)
@@ -228,13 +322,13 @@ namespace ParkingSystem
                     vend.parkoAutomjetin(automjeti);
                     return;
                 }
-                
-                
+
+
             }
-                Console.WriteLine("Nuk ka vende te lira!");
+            Console.WriteLine("Nuk ka vende te lira!");
         }
 
-        public void Dalja (Automjeti automjeti)
+        public void Dalja(Automjeti automjeti)
         {
             foreach (VendiParkimit vend in VendParkimi)
             {
@@ -247,37 +341,42 @@ namespace ParkingSystem
                     Console.WriteLine($"Tarifa totale: {tarifa} EUR");
                     return;
                 }
-                
-                
+
+
             }
-                    Console.WriteLine("Ky automjet nuk u gjet ne parking!");
+            Console.WriteLine("Ky automjet nuk u gjet ne parking!");
         }
 
         private double LlogaritTarifen(Automjeti automjeti, double ore, double tarifa)
         {
-            double koeficienti = 
+            double koeficienti =
             automjeti.Lloji == TipiAutomjetit.Motocikleta ? 0.5 :
             automjeti.Lloji == TipiAutomjetit.Kamion ? 2.0 :
             1.0;
             return ore * tarifa * koeficienti;
         }
 
-        private void ArkivoTeDhenat (Automjeti automjeti, VendiParkimit vendi, double tarifa)
+        private void ArkivoTeDhenat(Automjeti automjeti, VendiParkimit vendi, double tarifa)
         {
             string path = "teDhenatParkimit.txt";
             string teDhenat = $"{DateTime.Now}, {automjeti.Targa}, {automjeti.Lloji}, VendID:{vendi.ID}, Tarifa:{tarifa:F2} EUR";
             File.AppendAllText(path, teDhenat + Environment.NewLine);
-        
+
         }
 
-        
+
 
     }
 
 
-    
 
-    
+
+
+
+
+
+
+
 
 
 }
