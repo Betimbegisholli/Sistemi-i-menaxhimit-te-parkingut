@@ -1,6 +1,7 @@
 namespace ParkingMenagjment
 {
-    public enum TipiAutomjetit
+    // Enumet
+    public enum TipiAutomjetit  
     {
         Vetura,
         Motocikleta,

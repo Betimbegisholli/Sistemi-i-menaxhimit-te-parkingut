@@ -13,13 +13,15 @@ namespace ParkingMenagjment
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] args)  // Metoda main
         {
             int kapaciteti = 28;
-            Parkingu parkingu = new Parkingu(kapaciteti);
+            Parkingu parkingu = new Parkingu(kapaciteti);   // Inicializimi i Klases Parkingu 
 
             int id = 1;
 
+
+            // Shtimi i vendeve te parkimit me ane te loopave 
             for (int i = 0; i < 20; i++)
                 parkingu.ShtoVendeParkimi(new VendiParkimit(id++, TipiVendit.standard, 2.0));
 
@@ -31,16 +33,19 @@ namespace ParkingMenagjment
 
             Console.WriteLine("Regjistrimi i automjeteve për parking (shkruaj 'dil' për dalje)");
 
+
+            // Inputat per parkimin e automjetit
             while (true)
             {
                 Console.Write("\nZgjidh tipin (Makina / Motociklete / Kamion / dil): ");
                 string tipiInput = Console.ReadLine()?.ToLower();
 
-                if (tipiInput == "dil")
-                    break;
+                if (tipiInput == "dil")         
+                    break;                      // Dalim nga loopa
 
-                Automjeti automjeti = null;
+                Automjeti automjeti = null;     // Inicializimi i automjetit me vler fillestare null (te zbrazet)
 
+                // Kontrolloj tipin nese eshte makine
                 if (tipiInput == "makina")
                 {
                     Console.Write("Shkruani marken: ");
@@ -58,8 +63,10 @@ namespace ParkingMenagjment
                     Console.Write("A është për persona me aftësi të kufizuara? (po/jo): ");
                     bool meAftesi = Console.ReadLine()?.ToLower() == "po";
 
-                    automjeti = new Makina(marka, modeli, targa, electric, meAftesi);
+                    automjeti = new Makina(marka, modeli, targa, electric, meAftesi); // Inicializmi Makines me referenc Automjetin
                 }
+
+                // Kontrolloj tipin nese eshte motociklete
                 else if (tipiInput == "motociklete")
                 {
                     Console.Write("Shkruani marken: ");
@@ -71,8 +78,10 @@ namespace ParkingMenagjment
                     Console.Write("Shkruani targen: ");
                     string targa = Console.ReadLine() ?? "";
 
-                    automjeti = new Motocikleta(marka, modeli, targa);
+                    automjeti = new Motocikleta(marka, modeli, targa);      // Inicializmi motocikletes me referenc Automjetin
                 }
+
+                // Kontrolloj tipin nese eshte kamion
                 else if (tipiInput == "kamion")
                 {
                     Console.Write("Shkruani marken: ");
@@ -84,7 +93,7 @@ namespace ParkingMenagjment
                     Console.Write("Shkruani targen: ");
                     string targa = Console.ReadLine() ?? "";
 
-                    automjeti = new Kamion(marka, modeli, targa);
+                    automjeti = new Kamion(marka, modeli, targa);       // Inicializmi kamionit me referenc Automjetin
                 }
                 else
                 {
@@ -94,7 +103,7 @@ namespace ParkingMenagjment
 
                 if (automjeti != null)
                 {
-                    parkingu.Parko(automjeti);
+                    parkingu.Parko(automjeti);      // Parkojm automjetin me metoden e Parko(); te klases Parkingu
                 }
             }
 
@@ -102,15 +111,15 @@ namespace ParkingMenagjment
             Console.Write("\nShkruani targen e automjetit për dalje: ");
             string targaDalje = Console.ReadLine();
 
-            bool uGjet = false;
+            bool uGjet = false;      // vlera fillestare e variables uGjet vendoset false
 
             foreach (VendiParkimit vend in parkingu.VendParkimi)
             {
-                if (vend.eshteIzene && vend.automjetiParkuar.Targa == targaDalje)
+                if (vend.eshteIzene && vend.automjetiParkuar.Targa == targaDalje) //kontrollojm nese eshte vndi i zene dhe perputhet targa
                 {
                     parkingu.Dalja(vend.automjetiParkuar);
                     uGjet = true;
-                    break; // ndal loop pasi e ke nxjerrë automjetin
+                    break; // ndal loopen pasi  te nxjerrim automjetin
                 }
             }
 
@@ -122,6 +131,8 @@ namespace ParkingMenagjment
             // Shfaq automjetet aktualisht të parkuara
             Console.WriteLine("\nAutomjetet aktualisht të parkuara:");
 
+           
+           // Shfaq te dhenat per secilin vendparkimi te zene!!
             foreach (VendiParkimit vend in parkingu.VendParkimi)
             {
                 if (vend.eshteIzene)
@@ -131,11 +142,5 @@ namespace ParkingMenagjment
                 }
             }
         }
-
-
     }
-
-    //------------------------------------------------------------------------------------------------------------------------------  
-
-
 }
