@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
 using ParkingMenagjment;
 
 
@@ -31,16 +26,18 @@ namespace ParkingMenagjment
             for (int i = 0; i < 3; i++)
                 parkingu.ShtoVendeParkimi(new VendiParkimit(id++, TipiVendit.personaMeAftesiTeKufizuara, 4.0));
 
-            Console.WriteLine("Regjistrimi i automjeteve për parking (shkruaj 'dil' për dalje)");
+            Console.WriteLine("Regjistrimi i automjeteve për parking (shkruaj 'Ndal' për dalje)");
 
 
             // Inputat per parkimin e automjetit
             while (true)
             {
-                Console.Write("\nZgjidh tipin (Makina / Motociklete / Kamion / dil): ");
+                try
+                {
+                     Console.Write("\nZgjidh tipin (Makina / Motociklete / Kamion / Ndal): ");
                 string tipiInput = Console.ReadLine()?.ToLower();
 
-                if (tipiInput == "dil")         
+                if (tipiInput == "ndal")
                     break;                      // Dalim nga loopa
 
                 Automjeti automjeti = null;     // Inicializimi i automjetit me vler fillestare null (te zbrazet)
@@ -58,10 +55,16 @@ namespace ParkingMenagjment
                     string targa = Console.ReadLine() ?? "";
 
                     Console.Write("A është elektrike? (po/jo): ");
-                    bool electric = Console.ReadLine()?.ToLower() == "po";
+                    string electricInput = Console.ReadLine()?.ToLower() ?? "";
+                    if (electricInput != "po" && electricInput != "jo")
+                        throw new FormatException("Duhet te shkruash 'po' ose 'jo'");
+                    bool electric = electricInput == "po";
 
                     Console.Write("A është për persona me aftësi të kufizuara? (po/jo): ");
-                    bool meAftesi = Console.ReadLine()?.ToLower() == "po";
+                    string meAftesiInput = Console.ReadLine()?.ToLower() ?? "";
+                    if (meAftesiInput != "po" && meAftesiInput != "jo")
+                        throw new FormatException("Duhet te shkruash 'po' ose 'jo'");
+                    bool meAftesi = meAftesiInput == "po";
 
                     automjeti = new Makina(marka, modeli, targa, electric, meAftesi); // Inicializmi Makines me referenc Automjetin
                 }
@@ -105,34 +108,49 @@ namespace ParkingMenagjment
                 {
                     parkingu.Parko(automjeti);      // Parkojm automjetin me metoden e Parko(); te klases Parkingu
                 }
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+               
             }
 
             // DALJA: kërko automjetin sipas targës dhe nxirr atë
-            Console.Write("\nShkruani targen e automjetit për dalje: ");
-            string targaDalje = Console.ReadLine();
+            Console.Write("\nA deshironi të nxirrni ndonje automjet? (po/jo): ");
+            string deshironiDalje = Console.ReadLine()?.ToLower();
 
-            bool uGjet = false;      // vlera fillestare e variables uGjet vendoset false
-
-            foreach (VendiParkimit vend in parkingu.VendParkimi)
+            if (deshironiDalje == "po")
             {
-                if (vend.eshteIzene && vend.automjetiParkuar.Targa == targaDalje) //kontrollojm nese eshte vndi i zene dhe perputhet targa
+                Console.Write("Shkruani targen e automjetit për dalje: ");
+                string targaDalje = Console.ReadLine();
+
+                bool uGjet = false;
+
+                foreach (VendiParkimit vend in parkingu.VendParkimi)
                 {
-                    parkingu.Dalja(vend.automjetiParkuar);
-                    uGjet = true;
-                    break; // ndal loopen pasi  te nxjerrim automjetin
+                    if (vend.eshteIzene && vend.automjetiParkuar.Targa == targaDalje)
+                    {
+                        parkingu.Dalja(vend.automjetiParkuar);
+                        uGjet = true;
+                        break;
+                    }
+                }
+
+                if (!uGjet)
+                {
+                    Console.WriteLine("Nuk u gjet asnjë automjet me këtë targë.");
                 }
             }
-
-            if (!uGjet)
+            else
             {
-                Console.WriteLine("Nuk u gjet asnjë automjet me këtë targë.");
+                Console.WriteLine("Nuk po nxirret asnjë automjet.");
             }
 
             // Shfaq automjetet aktualisht të parkuara
             Console.WriteLine("\nAutomjetet aktualisht të parkuara:");
 
-           
-           // Shfaq te dhenat per secilin vendparkimi te zene!!
+
+            // Shfaq te dhenat per secilin vendparkimi te zene!!
             foreach (VendiParkimit vend in parkingu.VendParkimi)
             {
                 if (vend.eshteIzene)

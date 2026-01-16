@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\ParkingMenagjment\\ParkingMenagjment.csproj": {}
+    "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\parkingmenagjment\\ParkingMenagjment.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\ParkingMenagjment\\ParkingMenagjment.csproj": {
+    "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\parkingmenagjment\\ParkingMenagjment.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\ParkingMenagjment\\ParkingMenagjment.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\parkingmenagjment\\ParkingMenagjment.csproj",
         "projectName": "ParkingMenagjment",
-        "projectPath": "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\ParkingMenagjment\\ParkingMenagjment.csproj",
+        "projectPath": "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\parkingmenagjment\\ParkingMenagjment.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\ParkingMenagjment\\obj\\",
+        "outputPath": "C:\\Users\\HP\\Desktop\\ConsoleAPP\\Sistemi-i-menaxhimit-te-parkingut\\parkingmenagjment\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"

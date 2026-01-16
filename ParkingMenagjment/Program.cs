@@ -172,7 +172,17 @@ namespace ParkingMenagjment
         {
             string path = "teDhenatParkimit.txt"; // krijojm nje string me emrin e file-it
             string teDhenat = $"{DateTime.Now}, {automjeti.Targa}, {automjeti.Lloji}, VendID:{vendi.ID}, Tarifa:{tarifa:F2} EUR";
+
+            try
+            {
+                
             File.AppendAllText(path, teDhenat + Environment.NewLine);  // shton tekstin ne fund te file-it
+            } 
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Gabim gjatë ruajtjes së të dhënave: " + ex.Message);
+            }
 
         }
 
